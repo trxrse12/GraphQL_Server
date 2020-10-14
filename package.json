@@ -4,10 +4,7 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-    "build": "rm -rf dist/ && npx babel src -d dist",
-    "serve": "node ./dist/app.js",
-    "test": "./scripts/test_mock_server.sh",
-    "test_direct": "jest --watchAll"
+    "test": "jest --watchAll"
   },
   "author": "",
   "license": "ISC",
