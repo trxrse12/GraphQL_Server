@@ -38,4 +38,8 @@ export class Customers {
     }
     return {};
   }
+
+  isValid(customer) {
+    return Object.keys(this.errors(customer)).length === 0;
+  }
 }

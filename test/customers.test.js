@@ -84,4 +84,14 @@ describe('customers', () => {
       expect(Object.keys(customers.errors({phoneNumber: '123'}))).toEqual(['firstName','lastName'])
     });
   });
+
+  describe('isValid', () => {
+    it('returns true for a valid object', () => {
+      expect(new Customers().isValid(customer)).toBeTruthy();
+    });
+    it('returns false for an invalid object', () => {
+      const newCustomer = {...customer, firstName: ''};
+      expect(new Customers().isValid(newCustomer)).toBeFalsy();
+    });
+  });
 });
