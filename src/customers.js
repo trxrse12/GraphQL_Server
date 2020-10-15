@@ -3,6 +3,7 @@ export class Customers {
     this.nextId = 0;
     this.customers = {};
     // this.add = this.add.bind(this);
+    // this.errors = this.errors.bind(this);
   }
 
   add(customer) {
@@ -13,5 +14,15 @@ export class Customers {
 
   all() {
     return Object.assign({}, this.customers);
+  }
+
+  errors(customer) {
+    if (Object.values(this.customers)
+      .map(c => c.phoneNumber)
+      .find(c => c===customer?.phoneNumber)
+      ?.length>0){
+      return {phoneNumber: 'Phone number already exists in the system'}
+    }
+    return {}
   }
 }

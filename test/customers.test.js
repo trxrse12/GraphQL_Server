@@ -38,4 +38,26 @@ describe('customers', () => {
       expect(result[twoId].firstName).toEqual(two.firstName);
     });
   });
+
+  describe('errors', () => {
+    let customers;
+    const customer = {
+      firstName: 'test',
+      lastName: 'test',
+      phoneNumber: '23456'
+    };
+    beforeEach(() => {
+      customers = new Customers();
+      customers.add({phoneNumber: '12345'})
+    });
+    it('returns no errors for an object with the correct params', () => {
+      expect(customers.errors(customer)).toEqual({});
+    });
+    it('returns error if the phone number is already used', () => {
+      const newCustomer = {...customer, phoneNumber: '12345'};
+      expect(customers.errors(newCustomer)).toEqual({
+        phoneNumber: 'Phone number already exists in the system'
+      });
+    });
+  });
 });
