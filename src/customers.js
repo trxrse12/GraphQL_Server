@@ -17,18 +17,25 @@ export class Customers {
   }
 
   errors(customer) {
-    if (Object.values(this.customers)
-      .map(c => c.phoneNumber)
-      .find(c => c===customer?.phoneNumber)
-      ?.length>0){
-      return {phoneNumber: 'Phone number already exists in the system'}
+    let errors = {};
+    errors = Object.assign(errors, this.requiredValidation(customer, 'firstName', 'First name is required'));
+    errors = Object.assign(errors, this.requiredValidation(customer, 'lastName', 'Last name is required'));
+    errors = Object.assign(errors, this.requiredValidation(customer, 'phoneNumber', 'Phone number is required'));
+    errors = Object.assign(errors, this.uniqueValidation('phoneNumber', customer.phoneNumber, 'Phone number'));
+    return errors;
+  }
+
+  requiredValidation(customer, field, fieldDescription){
+    if ((!customer[field]) || (customer?.[field]?.length === 0) || (customer?.[field]?.trim()==='')){
+      return {[field]: `${fieldDescription}`};
     }
-    if (customer?.firstName?.length ===0 || customer?.firstName?.trim()===''){
-        return {firstName: 'First name is required'}
-      }
-    if (customer?.lastName?.length ===0 || customer?.lastName?.trim()===''){
-      return {lastName: 'Last name is required'}
+    return {};
+  }
+
+  uniqueValidation(field, fieldValue, fieldDescription){
+    if (Object.entries(this.customers).map(([_,c]) => c[field]).includes(fieldValue)){
+      return {[field]: fieldDescription + ' already exists in the system'}
     }
-    return {}
+    return {};
   }
 }

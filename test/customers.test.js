@@ -61,15 +61,27 @@ describe('customers', () => {
     });
     it('returns error if the first name is blank', () => {
       const newCustomer = {firstName: ''};
-      expect(customers.errors(newCustomer)).toEqual({
+      expect(customers.errors(newCustomer)).toMatchObject({
         firstName: 'First name is required'
       })
     });
     it('returns error if the last name is blank', () => {
       const newCustomer = {lastName: ''};
-      expect(customers.errors(newCustomer)).toEqual({
+      expect(customers.errors(newCustomer)).toMatchObject({
         lastName: 'Last name is required'
       })
+    });
+    it('returns error if the phone number is blank', () => {
+      const newCustomer = { ...customer, phoneNumber:''};
+      expect(customers.errors(newCustomer)).toMatchObject({
+        phoneNumber: 'Phone number is required'
+      })
+    });
+    it('returns one error for each required field when missing', () => {
+      expect(Object.keys(customers.errors({}))).toEqual(['firstName','lastName','phoneNumber'])
+    });
+    it('returns one error for each required field when missing', () => {
+      expect(Object.keys(customers.errors({phoneNumber: '123'}))).toEqual(['firstName','lastName'])
     });
   });
 });
