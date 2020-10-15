@@ -65,5 +65,11 @@ describe('customers', () => {
         firstName: 'First name is required'
       })
     });
+    it('returns error if the last name is blank', () => {
+      const newCustomer = {lastName: ''};
+      expect(customers.errors(newCustomer)).toEqual({
+        lastName: 'Last name is required'
+      })
+    });
   });
 });
