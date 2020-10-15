@@ -59,5 +59,11 @@ describe('customers', () => {
         phoneNumber: 'Phone number already exists in the system'
       });
     });
+    it('returns error if the first name is blank', () => {
+      const newCustomer = {firstName: ''};
+      expect(customers.errors(newCustomer)).toEqual({
+        firstName: 'First name is required'
+      })
+    });
   });
 });

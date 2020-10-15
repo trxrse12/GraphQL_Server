@@ -23,6 +23,9 @@ export class Customers {
       ?.length>0){
       return {phoneNumber: 'Phone number already exists in the system'}
     }
+    if (customer?.firstName.length ===0 || customer?.firstName.trim()===''){
+        return {firstName: 'First name is required'}
+      }
     return {}
   }
 }
