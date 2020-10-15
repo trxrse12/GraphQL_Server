@@ -1,4 +1,7 @@
-import {Customers, generateFakeCustomers} from '../src/customers';
+import {Customers,
+  generateFakeCustomers,
+  flatMap,
+} from '../src/customers';
 
 describe('customers', () => {
   const customer = {
@@ -111,7 +114,37 @@ describe('customers', () => {
       const customers = generateFakeCustomers();
       expect(customers[0].firstName).toMatch(/^\w+$/);
       expect(customers[0].lastName).toMatch(/^[\w']+$/);
-      expect(customers[0].phoneNumber).toMatch(/^[0-9()x\- ]+$/)
+      expect(customers[0].phoneNumber).toMatch(/^[0-9()x. \- ]+$/)
     });
+  });
+
+  describe('search customers', () => {
+    it.skip('returns only customers matching first name search terms', () => {
+      const customers = new Customers([
+        {firstName: 'A', lastName:'-', phoneNumber: '-'},
+        {firstName: 'B', lastName:'-', phoneNumber: '-'},
+      ]);
+      const result = customers.search({
+        searchTerms: ['A']
+      });
+      expect(result.length).toBe(1);
+      expect(result[0]).toEqual('A')
+    });
+  });
+
+  describe('flatMap function', () => {
+    let a = [1,2,3];
+
+    it('should return empty array when accepting null as input', () => {
+      const res = a.flatMap();
+      console.log('RRRRRR res=', res)
+      expect(res).toEqual([]);
+    });
+
+    it('should run the callback function on each array element', () => {
+      const fn = x => x+2;
+      const res = a.flatMap(fn);
+      expect(res).toEqual([3,4,5]);
+    })
   });
 });

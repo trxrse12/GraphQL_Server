@@ -1,10 +1,16 @@
-import {name, phone} from 'faker';
+import * as faker from 'faker';
+faker.locale = 'de';
+
+Array.prototype.flatMap = function (f) {
+  if (!f) return [];
+  return Array.prototype.concat.apply([], this.map(f));
+}
 
 export const generateFakeCustomer = (id) => ({
     id,
-    firstName: name.firstName(),
-    lastName: name.lastName(),
-    phoneNumber: phone.phoneNumber(),
+    firstName: faker.name.firstName(),
+    lastName: faker.name.lastName(),
+    phoneNumber: faker.phone.phoneNumber(),
   }
 );
 
@@ -59,5 +65,21 @@ export class Customers {
 
   isValid(customer) {
     return Object.keys(this.errors(customer)).length === 0;
+  }
+
+  searchForTerm(term) {
+    const startsWith = new RegExp(`^${term}`, 'i');
+    return Object.keys(this.customers).filter(customerId => {
+      const customer = this.customers[customerId];
+      return startsWith.test(customer.firstName)
+        || startsWith.test(customer.lastName)
+        || startsWith.test(customer.phoneNumber)
+    })
+  }
+
+  searchCustomers({searchTerms}) {
+    // searchTerms = searchTerms || [''];
+    // const sorted = searchTerms
+    //   .flatMap(term => this.search)
   }
 }
