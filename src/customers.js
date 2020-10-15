@@ -1,3 +1,21 @@
+import {name, phone} from 'faker';
+
+export const generateFakeCustomer = (id) => ({
+    id,
+    firstName: name.firstName(),
+    lastName: name.lastName(),
+    phoneNumber: phone.phoneNumber(),
+  }
+);
+
+export const generateFakeCustomers = () => {
+  const customers = [];
+  for (let i=0; i<1500; i++){
+    customers.push(generateFakeCustomer(i));
+  }
+  return customers;
+};
+
 export class Customers {
   constructor(){
     this.nextId = 0;

@@ -1,4 +1,4 @@
-import {Customers} from '../src/customers';
+import {Customers, generateFakeCustomers} from '../src/customers';
 
 describe('customers', () => {
   const customer = {
@@ -86,12 +86,25 @@ describe('customers', () => {
   });
 
   describe('isValid', () => {
+    const customer = {
+      firstName: 'test',
+      lastName: 'test',
+      phoneNumber: '23456'
+    };
     it('returns true for a valid object', () => {
       expect(new Customers().isValid(customer)).toBeTruthy();
     });
     it('returns false for an invalid object', () => {
       const newCustomer = {...customer, firstName: ''};
       expect(new Customers().isValid(newCustomer)).toBeFalsy();
+    });
+  });
+
+  describe('generateFakeCustomers', () => {
+    let customersGenerator;
+    it('generates 1500 customers', () => {
+      const customers = generateFakeCustomers();
+      expect(customers.length).toBe(1500);
     });
   });
 });
