@@ -106,5 +106,12 @@ describe('customers', () => {
       const customers = generateFakeCustomers();
       expect(customers.length).toBe(1500);
     });
+
+    it('generates valid data', () => {
+      const customers = generateFakeCustomers();
+      expect(customers[0].firstName).toMatch(/^\w+$/);
+      expect(customers[0].lastName).toMatch(/^[\w']+$/);
+      expect(customers[0].phoneNumber).toMatch(/^[0-9()x\- ]+$/)
+    });
   });
 });
