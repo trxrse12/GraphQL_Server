@@ -1,6 +1,5 @@
 import {Customers,
   generateFakeCustomers,
-  flatMap,
 } from '../src/customers';
 
 describe('customers', () => {
@@ -133,14 +132,34 @@ describe('customers', () => {
     })
   });
 
+  describe('unique function', () => {
+    let a = [1,2,2,3];
+    let b = ['a','v', 'm', 'v', 'a'];
+    let c = [100, 200, 300, 100, 300, 200, 300];
+    it('should exist on array prototype', () => {
+      expect(a.unique).toBeDefined();
+    });
+    it('returns uniq values in an array', () => {
+      expect(a.unique()).toEqual([1,2,3]);
+    });
+    it('eliminates multiple duplicated pairs in an array', () => {
+      expect(b.unique()).toEqual(['a','v','m'])
+    });
+    it('eliminates triple duplicates', () => {
+      expect(c.unique()).toEqual([100,200,300]);
+    });
+  });
+
   describe('searchForTerm', () => {
     let customers;
     beforeEach(() => {
       customers = new Customers([
         {firstName: 'A', lastName:'-', phoneNumber: '-'},
-        {firstName: 'B', lastName:'-', phoneNumber: '-'},
+        {firstName: 'X', lastName:'-', phoneNumber: '-'},
         {firstName: 'C', lastName:'-', phoneNumber: '-'},
         {firstName: 'D', lastName:'A', phoneNumber: '-'},
+        {firstName: 'E', lastName:'bran', phoneNumber: '-'},
+        {firstName: 'F', lastName:'cucumber', phoneNumber: '-'},
       ]);
     });
     afterEach(() => {
@@ -152,34 +171,39 @@ describe('customers', () => {
       expect(res).toEqual([]);
     });
     it('should return the index of the customers element that contains the search term', () => {
-      const term = ['A'];
+      const term = ['X'];
       const res = customers.searchForTerm(term);
-      expect(res).toEqual(['0']);
+      expect(res).toEqual(['1']);
     });
     it('should return empty array if element not found in customer props', () => {
-      const term = ['C'];
+      const term = ['M'];
       const res = customers.searchForTerm(term);
       expect(res).toEqual([]);
     });
-    it.only('should return a list of indexes in customers array when is finding multiple elements', () => {
+    it('should return a list of indexes in customers array when is finding multiple elements', () => {
       const term = ['A'];
       const res = customers.searchForTerm(term);
       expect(res).toEqual(['0','3']);
     });
+    it('should NOT return indexes of elements containing the search term as a substring of 2nd char', () => {
+      const term = ['r'];
+      const res = customers.searchForTerm(term);
+      expect(res).toEqual([]);
+    });
   });
 
-  // describe('search customers', () => {
-  //   it('returns only customers matching first name search terms', () => {
-  //     const customers = new Customers([
-  //       {firstName: 'A', lastName:'-', phoneNumber: '-'},
-  //       {firstName: 'B', lastName:'-', phoneNumber: '-'},
-  //     ]);
-  //     const result = customers.search({
-  //       searchTerms: ['A']
-  //     });
-  //     console.log('EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE result=', result)
-  //     expect(result.length).toBe(1);
-  //     expect(result[0]).toEqual('A')
-  //   });
-  // });
+  describe('search customers', () => {
+    it('returns only customers matching first name search terms', () => {
+      const customers = new Customers([
+        {firstName: 'A', lastName:'-', phoneNumber: '-'},
+        {firstName: 'B', lastName:'-', phoneNumber: '-'},
+      ]);
+      const result = customers.search({
+        searchTerms: ['A'],
+      });
+      console.log('EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE result=', result)
+      expect(result.length).toBe(1);
+      expect(result[0].firstName).toEqual('A');
+    });
+  });
 });

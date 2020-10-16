@@ -75,6 +75,9 @@ export class Customers {
     return Object.keys(this.errors(customer)).length === 0;
   }
 
+  /*
+    returns ['1','3'] ==> the indexes of the elements having a prop containing the term
+   */
   searchForTerm(term) {
     if (!term) return [];
     const startsWith = new RegExp(`^${term}`, 'i');
@@ -89,14 +92,17 @@ export class Customers {
     })
   }
 
-  search({searchTerms}) {
+  search({searchTerms, orderBy, orderDirection}) {
     searchTerms = searchTerms || [''];
     const sorted = searchTerms
       .flatMap(term => this.searchForTerm(term)) // brings bag the customer indexes having
                                                   // at least a field in the corresp. customer
                                                   // equal to search value
-      // .unique()
-      // .map(id => this.customers[id]);
+      .unique()
+      .map(id => this.customers[id])
+      // .sort((l,r) => orderDirection === 'desc'
+      //   ? r[orderBy].localeCompare()
+      // )
     console.log('WWWWWWWWWWWWWWWWWWWWWWWWW sorted=', sorted)
     return sorted;
   }
