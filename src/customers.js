@@ -92,18 +92,24 @@ export class Customers {
     })
   }
 
-  search({searchTerms, orderBy, orderDirection}) {
+  search({searchTerms, orderBy, orderDirection, limit, after}) {
+    limit = limit || 10;
     searchTerms = searchTerms || [''];
+    orderBy = orderBy || searchTerms;
+    orderDirection = orderDirection || 'asc';
+    console.log('SSSSSSSSSSSSSSSSSSSSSSSS searchTerms=', searchTerms)
+    console.log('SSSSSSSSSSSSSSSSSSSSSSSS this.customers=', this.customers)
+    if (searchTerms == ['']) return this.customers;
     const sorted = searchTerms
       .flatMap(term => this.searchForTerm(term)) // brings bag the customer indexes having
                                                   // at least a field in the corresp. customer
                                                   // equal to search value
       .unique()
       .map(id => this.customers[id])
-      // .sort((l,r) => orderDirection === 'desc'
-      //   ? r[orderBy].localeCompare()
-      // )
-    console.log('WWWWWWWWWWWWWWWWWWWWWWWWW sorted=', sorted)
-    return sorted;
+      .sort((l,r) => orderDirection === 'desc'
+        ? r[orderBy].localeCompare(l[orderBy]) : l[orderBy].localeCompare(r[orderBy])
+      );
+    const afterPosition = after ? sorted.findIndex( c => c.id === after) + 1 : 0;
+    return sorted.slice(afterPosition, afterPosition + limit);
   }
 }

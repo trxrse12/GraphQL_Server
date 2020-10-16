@@ -151,7 +151,7 @@ describe('customers', () => {
   });
 
   describe('searchForTerm', () => {
-    let customers;
+    let customers, incompleteCustomers;
     beforeEach(() => {
       customers = new Customers([
         {firstName: 'A', lastName:'-', phoneNumber: '-'},
@@ -161,28 +161,56 @@ describe('customers', () => {
         {firstName: 'E', lastName:'bran', phoneNumber: '-'},
         {firstName: 'F', lastName:'cucumber', phoneNumber: '-'},
       ]);
+      incompleteCustomers = new Customers([
+        {firstName: 'A', lastName:'-',},
+        {firstName: 'X', phoneNumber: '-'},
+        {firstName: 'C', phoneNumber: '-'},
+        {firstName: 'D', lastName:'A', phoneNumber: '-'},
+        {lastName:'bran', phoneNumber: '-'},
+        {firstName: 'F', lastName:'cucumber', phoneNumber: '-'},
+      ])
     });
     afterEach(() => {
       customers = {};
     });
-    it('should return false if term is null', () => {
+    it('should return false if term is null and all fields provided', () => {
       const term = null;
       const res = customers.searchForTerm(term);
       expect(res).toEqual([]);
     });
-    it('should return the index of the customers element that contains the search term', () => {
+    it('should return false if term is null and NOT all fields provided', () => {
+      const term = null;
+      const res = incompleteCustomers.searchForTerm(term);
+      expect(res).toEqual([]);
+    });
+    it('should return the index of the customers element that contains the search term, if all fields provided', () => {
       const term = ['X'];
       const res = customers.searchForTerm(term);
       expect(res).toEqual(['1']);
     });
-    it('should return empty array if element not found in customer props', () => {
+    it('should return the index of the customers element that contains the search term, if NOT all fields provided', () => {
+      const term = ['X'];
+      const res = incompleteCustomers.searchForTerm(term);
+      expect(res).toEqual(['1']);
+    });
+    it('should return empty array if element not found in customer props and all fields provided', () => {
       const term = ['M'];
       const res = customers.searchForTerm(term);
       expect(res).toEqual([]);
     });
-    it('should return a list of indexes in customers array when is finding multiple elements', () => {
+    it('should return empty array if element not found in customer props and NOT all fields provided', () => {
+      const term = ['M'];
+      const res = incompleteCustomers.searchForTerm(term);
+      expect(res).toEqual([]);
+    });
+    it('should return a list of indexes in customers array when is finding multiple elements, if all fields provided', () => {
       const term = ['A'];
       const res = customers.searchForTerm(term);
+      expect(res).toEqual(['0','3']);
+    });
+    it('should return a list of indexes in customers array when is finding multiple elements, if NOT all fields provided', () => {
+      const term = ['A'];
+      const res = incompleteCustomers.searchForTerm(term);
       expect(res).toEqual(['0','3']);
     });
     it('should NOT return indexes of elements containing the search term as a substring of 2nd char', () => {
@@ -201,9 +229,121 @@ describe('customers', () => {
       const result = customers.search({
         searchTerms: ['A'],
       });
-      console.log('EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE result=', result)
       expect(result.length).toBe(1);
       expect(result[0].firstName).toEqual('A');
+    });
+    it('returns only customers matching last name search terms', () => {
+      const customers = new Customers([
+        {firstName: '-', lastName:'A', phoneNumber: '-'},
+        {firstName: '-', lastName:'B', phoneNumber: '-'},
+      ]);
+      const result = customers.search({
+        searchTerms: ['A'],
+      });
+      expect(result.length).toBe(1);
+      expect(result[0].lastName).toEqual('A');
+    });
+    it('returns only customers matching phone number search terms', () => {
+      const customers = new Customers([
+        { phoneNumber: '123' },
+        { phoneNumber: '234' }]);
+      const result = customers.search({
+        searchTerms: ['1']
+      });
+      expect(result.length).toEqual(1);
+      expect(result[0].phoneNumber).toEqual('123');
+    });
+    it('only matches on start of text string', () => {
+      const customers = new Customers([
+        { phoneNumber: '123' },
+        { phoneNumber: '234' }
+      ]);
+      const result = customers.search({
+        searchTerms: ['3']
+      });
+      expect(result.length).toEqual(0);
+    });
+    it('does not list search result twice if it matches more than one field', () => {
+      const customers = new Customers([
+        {firstName: 'A', lastName: 'A'}
+      ]);
+      const result = customers.search({
+        searchTerms: ['A'],
+        orderBy: 'firstName',
+      });
+      expect(result.length).toEqual(1);
+    });
+    it('sorts according to the orderBy field', () => {
+      const customers = new Customers([
+        {firstName: 'A', phoneNumber: '234'},
+        {firstName: 'A', phoneNumber: '123'},
+      ]);
+      const result = customers.search({
+        searchTerms: ['A'],
+        orderBy: 'phoneNumber',
+      });
+      expect(result.length).toEqual(2);
+      expect(result[0].phoneNumber).toEqual('123');
+      expect(result[1].phoneNumber).toEqual('234');
+    });
+    it('sorts descending', () => {
+      const customers = new Customers([
+        {firstName: 'A', phoneNumber: '234'},
+        {firstName: 'A', phoneNumber: '123'},
+      ]);
+      const result = customers.search({
+        searchTerms: ['A'],
+        orderBy: 'phoneNumber',
+        orderDirection: 'desc',
+      });
+      expect(result.length).toEqual(2);
+      expect(result[0].phoneNumber).toEqual('234');
+      expect(result[1].phoneNumber).toEqual('123');
+    });
+    it('limits number of found records by limit', () => {
+      const customers = new Customers([
+        {firstName: 'A', phoneNumber: '1'},
+        {firstName: 'A', phoneNumber: '2'},
+        {firstName: 'A', phoneNumber: '3'},
+        {firstName: 'A', phoneNumber: '4'},
+        {firstName: 'A', phoneNumber: '5'},
+        {firstName: 'A', phoneNumber: '6'},
+      ]);
+      const result = customers.search({
+        searchTerms: ['A'],
+        orderBy: 'firstName',
+        limit: 3,
+      });
+      expect(result.length).toEqual(3);
+    });
+
+    it('pages to the first record after the one specified', () => {
+      const customers = new Customers([
+        {firstName: 'A', phoneNumber: '1'},
+        {firstName: 'A', phoneNumber: '2'},
+        {firstName: 'A', phoneNumber: '3'},
+        {firstName: 'A', phoneNumber: '4'},
+        {firstName: 'A', phoneNumber: '5'},
+        {firstName: 'A', phoneNumber: '6'},
+      ]);
+      const afterId = customers.all()[2].id;
+      const result = customers.search({
+        searchTerms: ['A'],
+        limit: 3,
+        orderBy: 'firstName',
+        after: afterId
+      });
+      expect(result[0].phoneNumber).toEqual('4');
+    });
+
+    it.only('returns everything if no search terms defined', () => {
+      const customers = new Customers([
+        {firstName: 'A'},
+        {firstName: 'B'},
+      ]);
+      const result = customers.search({});
+      console.log('RRERRRRRRRRRRRRR result=', result)
+      expect(result.length).toEqual(2);
     });
   });
 });
