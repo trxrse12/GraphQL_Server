@@ -118,26 +118,11 @@ describe('customers', () => {
     });
   });
 
-  describe('search customers', () => {
-    it.skip('returns only customers matching first name search terms', () => {
-      const customers = new Customers([
-        {firstName: 'A', lastName:'-', phoneNumber: '-'},
-        {firstName: 'B', lastName:'-', phoneNumber: '-'},
-      ]);
-      const result = customers.search({
-        searchTerms: ['A']
-      });
-      expect(result.length).toBe(1);
-      expect(result[0]).toEqual('A')
-    });
-  });
-
   describe('flatMap function', () => {
     let a = [1,2,3];
 
     it('should return empty array when accepting null as input', () => {
       const res = a.flatMap();
-      console.log('RRRRRR res=', res)
       expect(res).toEqual([]);
     });
 
@@ -147,4 +132,54 @@ describe('customers', () => {
       expect(res).toEqual([3,4,5]);
     })
   });
+
+  describe('searchForTerm', () => {
+    let customers;
+    beforeEach(() => {
+      customers = new Customers([
+        {firstName: 'A', lastName:'-', phoneNumber: '-'},
+        {firstName: 'B', lastName:'-', phoneNumber: '-'},
+        {firstName: 'C', lastName:'-', phoneNumber: '-'},
+        {firstName: 'D', lastName:'A', phoneNumber: '-'},
+      ]);
+    });
+    afterEach(() => {
+      customers = {};
+    });
+    it('should return false if term is null', () => {
+      const term = null;
+      const res = customers.searchForTerm(term);
+      expect(res).toEqual([]);
+    });
+    it('should return the index of the customers element that contains the search term', () => {
+      const term = ['A'];
+      const res = customers.searchForTerm(term);
+      expect(res).toEqual(['0']);
+    });
+    it('should return empty array if element not found in customer props', () => {
+      const term = ['C'];
+      const res = customers.searchForTerm(term);
+      expect(res).toEqual([]);
+    });
+    it.only('should return a list of indexes in customers array when is finding multiple elements', () => {
+      const term = ['A'];
+      const res = customers.searchForTerm(term);
+      expect(res).toEqual(['0','3']);
+    });
+  });
+
+  // describe('search customers', () => {
+  //   it('returns only customers matching first name search terms', () => {
+  //     const customers = new Customers([
+  //       {firstName: 'A', lastName:'-', phoneNumber: '-'},
+  //       {firstName: 'B', lastName:'-', phoneNumber: '-'},
+  //     ]);
+  //     const result = customers.search({
+  //       searchTerms: ['A']
+  //     });
+  //     console.log('EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE result=', result)
+  //     expect(result.length).toBe(1);
+  //     expect(result[0]).toEqual('A')
+  //   });
+  // });
 });

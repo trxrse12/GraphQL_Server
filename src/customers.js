@@ -4,7 +4,13 @@ faker.locale = 'de';
 Array.prototype.flatMap = function (f) {
   if (!f) return [];
   return Array.prototype.concat.apply([], this.map(f));
-}
+};
+
+Array.prototype.unique = function() {
+  return this.filter(function (value, index, self) {
+    return self.indexOf(value) === index;
+  });
+};
 
 export const generateFakeCustomer = (id) => ({
     id,
@@ -23,15 +29,17 @@ export const generateFakeCustomers = () => {
 };
 
 export class Customers {
-  constructor(){
+  constructor(initialCustomers = []){
     this.nextId = 0;
     this.customers = {};
-    // this.add = this.add.bind(this);
+    this.add = this.add.bind(this);
+    initialCustomers.forEach(this.add);
     // this.errors = this.errors.bind(this);
   }
 
   add(customer) {
-    const customerWithId = Object.assign({}, customer, {id: this.nextId++});
+    const calculatedId = this.nextId++;
+    const customerWithId = Object.assign({}, customer, {id: calculatedId});
     this.customers[customerWithId.id] = customerWithId;
     return customerWithId;
   }
@@ -68,7 +76,11 @@ export class Customers {
   }
 
   searchForTerm(term) {
+    if (!term) return [];
     const startsWith = new RegExp(`^${term}`, 'i');
+    // console.log('KKKKKKKKKKKKKKKKKKKKKK term=',term )
+    // console.log('KKKKKKKKKKKKKKKKKKKKKK startsWith=',startsWith )
+    // console.log('KKKKKKKKKKKKKKKKKKKKKK this.customers=',this.customers )
     return Object.keys(this.customers).filter(customerId => {
       const customer = this.customers[customerId];
       return startsWith.test(customer.firstName)
@@ -77,9 +89,15 @@ export class Customers {
     })
   }
 
-  searchCustomers({searchTerms}) {
-    // searchTerms = searchTerms || [''];
-    // const sorted = searchTerms
-    //   .flatMap(term => this.search)
+  search({searchTerms}) {
+    searchTerms = searchTerms || [''];
+    const sorted = searchTerms
+      .flatMap(term => this.searchForTerm(term)) // brings bag the customer indexes having
+                                                  // at least a field in the corresp. customer
+                                                  // equal to search value
+      // .unique()
+      // .map(id => this.customers[id]);
+    console.log('WWWWWWWWWWWWWWWWWWWWWWWWW sorted=', sorted)
+    return sorted;
   }
 }
