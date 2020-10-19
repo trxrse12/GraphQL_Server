@@ -23,3 +23,36 @@ describe('buildTimeSlots', () => {
   });
 });
 
+
+describe('generateFakeAppointments', () => {
+  const customers = Array(10).fill(1).map(() => ({id: 123}));
+  const timeSlots = Array(10).fill(1).map(() => ({startsAt: 234, stylists: ['Ashley', 'Jo']}));
+
+  it('generates more than half of all the timeslots available', () => {
+    const result = generateFakeAppointments(customers, timeSlots);
+    expect(result.length).toBeLessThan(timeSlots.length);
+    expect(result.length).toBeGreaterThan(timeSlots.length/2);
+  });
+
+  it('sets a customer id', () => {
+    const result = generateFakeAppointments(customers, timeSlots);
+    expect(result[0].customer).toEqual(123);
+  });
+
+  it('sets a startsAt time', () => {
+    const result = generateFakeAppointments(customers, timeSlots);
+    expect(result[0].startsAt).toEqual(234);
+  });
+
+  it('sets the stylist', () => {
+    const result = generateFakeAppointments(customers, timeSlots);
+    expect(['Ashley', 'Jo'].includes(result[0].stylist)).toBeTruthy();
+  });
+
+  it('picks a random service', () => {
+    const services = ['Cut', 'Blow-dry', 'Extensions', 'Cut & color', 'Beard trim', 'Cut & beard trim', 'Extensions'];
+    const result = generateFakeAppointments(customers, timeSlots);
+    expect(services.includes(result[0].service)).toBeTruthy();
+  });
+});
+
