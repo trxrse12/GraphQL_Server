@@ -1,7 +1,9 @@
 const stylists = ['Ashley', 'Jo', 'Pat', 'Sam'];
 const services = ['Cut', 'Blow-dry', 'Extensions', 'Cut & color', 'Beard trim', 'Cut & beard trim', 'Extensions'];
 
-function getRandomInt(min, max){
+export const randomInt = range => Math.floor(Math.random() * range);
+
+export function getRandomInt(min, max){
   min = Math.ceil(min);
   max = Math.floor(max);
   return Math.floor(Math.random() * (max - min +1)) + min;
@@ -24,21 +26,44 @@ export function buildTimeSlots() {
   return [].concat(...times);
 }
 
-function pickRandom(myArray){
-  return Array.isArray(myArray) ? myArray[Math.floor(Math.random() * myArray.length)] : undefined;
+Array.prototype.pickRandom = function(){
+  return this[randomInt(this.length)];
 }
 
+/*
+  @function that generates an array of random appointments, of length more then the length of timeslots array:
+     [
+        { customer: 58, startsAt: 234, stylist: 'Jo', service: 'Beard trim' },
+        { customer: 80, startsAt: 234, stylist: 'Ashley', service: 'Cut' },
+        { customer: 37, startsAt: 234, stylist: 'Jo', service: 'Blow-dry' },
+      ]
+  @params:
+    customers: an array of random customers
+    [
+        { id: 50 }, { id: 22 },
+        { id: 50 }, { id: 94 },
+        { id: 83 }, { id: 5 },
+        { id: 56 }, { id: 85 },
+        { id: 80 }, { id: 66 }
+      ]
+
+    timeslots: [
+        { startsAt: 234, stylists: [ 'Ashley', 'Jo' ] },
+        { startsAt: 234, stylists: [ 'Ashley', 'Jo' ] },
+        { startsAt: 234, stylists: [ 'Ashley', 'Jo' ] },
+    ]
+
+    services: ['Cut', 'Blow-dry', 'Extensions', 'Cut & color', 'Beard trim', 'Cut & beard trim', 'Extensions'];
+ */
 export function generateFakeAppointments(customers, timeslots) {
-  console.log('CCCCCCCCCCCCCCCCCCCCCCC customers=', customers);
-  console.log('DDDDDDDDDDDDDDDDDDDDDDD timeslots=', timeslots);
-  const res = [...Array(timeslots.length).keys()]
+  let appointments = [];
+  appointments = [...Array(timeslots.length).keys()]
     .slice(0, getRandomInt((timeslots.length)/2+1, timeslots.length))
-    .map((v) => ({
-      customer: customers[0].id,
-      startsAt: timeslots[0].startsAt,
-      stylist: pickRandom(timeslots[0].stylists),
-      service: pickRandom(services),
+    .map((v,i) => ({
+      customer: customers.pickRandom().id,
+      startsAt: timeslots[i].startsAt,
+      stylist: timeslots[0].stylists.pickRandom(),
+      service: services.pickRandom(),
     }));
-  console.log('AAAAAAAAAAAAAAAAAAAAAAAA res=',res);
-  return res;
+  return appointments;
 }
