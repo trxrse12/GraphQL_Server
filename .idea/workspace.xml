@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="046aef7a-ddf3-49b1-a223-e9744b6f6df5" name="Default Changelist" comment="" />
+    <list default="true" id="046aef7a-ddf3-49b1-a223-e9744b6f6df5" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/customers.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/customers.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/customers.test.js" beforeDir="false" afterPath="$PROJECT_DIR$/test/customers.test.js" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -23,7 +27,7 @@
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="nodejs_package_manager_path" value="npm" />
-    <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
+    <property name="settings.editor.selected.configurable" value="editing.templates" />
     <property name="vue.rearranger.settings.migration" value="true" />
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
@@ -35,7 +39,8 @@
       <option name="presentableId" value="Default" />
       <updated>1602864433409</updated>
       <workItem from="1602864444275" duration="768000" />
-      <workItem from="1602865266313" duration="543000" />
+      <workItem from="1602865266313" duration="3699000" />
+      <workItem from="1603094049196" duration="198000" />
     </task>
     <servers />
   </component>
@@ -43,13 +48,17 @@
     <option name="version" value="3" />
   </component>
   <component name="WindowStateProjectService">
+    <state x="439" y="377" width="551" height="333" key="#com.intellij.codeInsight.template.impl.EditVariableDialog" timestamp="1602867638177">
+      <screen x="0" y="0" width="1920" height="1060" />
+    </state>
+    <state x="439" y="377" width="551" height="333" key="#com.intellij.codeInsight.template.impl.EditVariableDialog/0.0.1920.1060@0.0.1920.1060" timestamp="1602867638177" />
     <state x="736" y="273" width="438" height="506" key="FileChooserDialogImpl" timestamp="1602864626165">
       <screen x="0" y="0" width="1920" height="1060" />
     </state>
     <state x="736" y="273" width="438" height="506" key="FileChooserDialogImpl/0.0.1920.1060@0.0.1920.1060" timestamp="1602864626165" />
-    <state x="231" y="181" key="SettingsEditor" timestamp="1602865210294">
+    <state x="231" y="181" key="SettingsEditor" timestamp="1602867639593">
       <screen x="0" y="0" width="1920" height="1060" />
     </state>
-    <state x="231" y="181" key="SettingsEditor/0.0.1920.1060@0.0.1920.1060" timestamp="1602865210293" />
+    <state x="231" y="181" key="SettingsEditor/0.0.1920.1060@0.0.1920.1060" timestamp="1602867639593" />
   </component>
 </project>

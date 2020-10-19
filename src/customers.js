@@ -81,9 +81,6 @@ export class Customers {
   searchForTerm(term) {
     if (!term) return [];
     const startsWith = new RegExp(`^${term}`, 'i');
-    // console.log('KKKKKKKKKKKKKKKKKKKKKK term=',term )
-    // console.log('KKKKKKKKKKKKKKKKKKKKKK startsWith=',startsWith )
-    // console.log('KKKKKKKKKKKKKKKKKKKKKK this.customers=',this.customers )
     return Object.keys(this.customers).filter(customerId => {
       const customer = this.customers[customerId];
       return startsWith.test(customer.firstName)
@@ -95,11 +92,14 @@ export class Customers {
   search({searchTerms, orderBy, orderDirection, limit, after}) {
     limit = limit || 10;
     searchTerms = searchTerms || [''];
-    orderBy = orderBy || searchTerms;
+    orderBy = orderBy || 'firstName';
     orderDirection = orderDirection || 'asc';
-    console.log('SSSSSSSSSSSSSSSSSSSSSSSS searchTerms=', searchTerms)
-    console.log('SSSSSSSSSSSSSSSSSSSSSSSS this.customers=', this.customers)
-    if (searchTerms == ['']) return this.customers;
+    if (!Array.isArray(searchTerms) ||  // return all if no search term
+      ((searchTerms.length === 1) && (searchTerms[0] === '')))
+        {return (Object.entries(this.all())
+          .map(v => v[1])
+          .sort((l,r) => l.firstName.localeCompare(r.firstName))
+          .slice(0,10))}
     const sorted = searchTerms
       .flatMap(term => this.searchForTerm(term)) // brings bag the customer indexes having
                                                   // at least a field in the corresp. customer

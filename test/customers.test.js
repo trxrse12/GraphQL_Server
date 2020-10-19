@@ -336,14 +336,32 @@ describe('customers', () => {
       expect(result[0].phoneNumber).toEqual('4');
     });
 
-    it.only('returns everything if no search terms defined', () => {
+    it('returns everything if no search terms defined', () => {
       const customers = new Customers([
         {firstName: 'A'},
         {firstName: 'B'},
       ]);
       const result = customers.search({});
-      console.log('RRERRRRRRRRRRRRR result=', result)
       expect(result.length).toEqual(2);
+    });
+
+    it('by default limits to ten records', () => {
+      const customers = new Customers();
+      for (let i = 0; i<20; ++i){
+        customers.add({firstName: 'A', phoneNumber: i});
+      };
+      const result = customers.search({}); // retrieve all
+      expect(result.length).toEqual(10);
+    });
+
+    it('by default order by firstName', () => {
+      const customers = new Customers([
+        {firstName: 'Z', lastName: 'A'},
+        {firstName: 'Y', lastName: 'B'},
+      ]);
+      const result = customers.search({});
+      expect(result[0].firstName).toEqual('Y');
+      expect(result[1].firstName).toEqual('Z');
     });
   });
 });
