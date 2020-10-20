@@ -27,17 +27,6 @@ describe('buildTimeSlots', () => {
   });
 });
 
-
-// describe('getRandomInt', () => {
-//   it('should return a value between min and max', () => {
-//     const min = 34;
-//     const max = 198;
-//     for (let i=0; i<100, i++){
-//       const res = getRandomInt(min, max);
-//     }
-//   });
-// });
-
 describe('generateFakeAppointments', () => {
   const customerIdPool = Array(100).fill(1).map(() => getRandomInt(0,100));
   const customers = Array(10)
@@ -46,9 +35,7 @@ describe('generateFakeAppointments', () => {
       const randomId = customerIdPool.pickRandom();
       return ({id: randomId})
     });
-  console.log('OOOOOOOOOOOOOOOOOOOOOOOOOOOOO customers=', customers)
   const timeSlots = Array(10).fill(1).map(() => ({startsAt: 234, stylists: ['Ashley', 'Jo']}));
-  console.log('TTTTTTTTTTTTTTTTTTTTTTTTTTTTT timeslots=', timeSlots)
   it('generates more than half of all the timeslots available', () => {
     const result = generateFakeAppointments(customers, timeSlots);
     expect(result.length).toBeLessThan(timeSlots.length);
@@ -74,8 +61,110 @@ describe('generateFakeAppointments', () => {
   it('picks a random service', () => {
     const services = ['Cut', 'Blow-dry', 'Extensions', 'Cut & color', 'Beard trim', 'Cut & beard trim', 'Extensions'];
     const result = generateFakeAppointments(customers, timeSlots);
-    console.log('HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH result=', result)
     expect(services.includes(result[0].service)).toBeTruthy();
+  });
+});
+
+describe('appointments class', () => {
+  const timeSlots = [{startsAt: 123}, {startsAt: 234}];
+
+  it('initially loads all the initialAppointments', () => {
+    const appointments = new Appointments([{startsAt: 123}],[]);
+    const result = appointments.getAppointments(50,124,[]);
+    expect(result.length).toEqual(1);
+  });
+
+  describe('add', () => {
+    it('removes the duplicated times from available time slots', () => {
+      const appointments = new Appointments([],timeSlots);
+      const result = appointments.getTimeSlots();
+      appointments.add({startsAt: result[0].startsAt})
+      expect(appointments.getTimeSlots().length).toEqual(1);
+    });
+  });
+
+  describe('deleteAll', () => {
+    const customers = [];
+    it('deletes all appointments', () => {
+      const appointments = new Appointments();
+      appointments.add({startAt: 2});
+      appointments.add({startAt: 3});
+      appointments.deleteAll();
+      const result = appointments.getAppointments(0, 24, customers);
+      expect(result.length).toBe(0);
+    });
+  });
+
+  describe('getAppointments', () => {
+    const customers = {'customer': {id:123}};
+    it('filters out anything before the from time', () => {
+      const appointments = new Appointments();
+      appointments.add({startsAt: 1, customer: 'customer'});
+      appointments.add({startsAt: 2, customer: 'customer'});
+      const result = appointments.getAppointments(2,3,customers);
+      expect(result.length).toBe(1);
+      expect(result[0].startsAt).toBe(2);    });
+
+    it('filters out anything after the to time', () => {
+      const appointments = new Appointments();
+      appointments.add({startsAt: 1, customer: 'customer'});
+      appointments.add({startsAt: 2, customer: 'customer'});
+      const result = appointments.getAppointments(0,1,customers);
+      expect(result.length).toBe(1);
+      expect(result[0].startsAt).toBe(1);
+    });
+
+    it('includes the customer record', () => {
+      const appointments = new Appointments();
+      appointments.add({startsAt: 1, customer: 'customer'});
+      const result = appointments.getAppointments(0, 3, customers);
+      expect(result[0].customer).toEqual(customers['customer']);
+    });
+
+    it('sorts appointments by startsAt', () => {
+      const appointments = new Appointments();
+      appointments.add({startsAt: 2, customer: 'customer'});
+      appointments.add({startsAt: 1, customer: 'customer'});
+      const result = appointments.getAppointments(0,2,customers);
+      expect(result.length).toBe(2);
+      expect(result[0].startsAt).toBe(1);
+      expect(result[1].startsAt).toBe(2);
+    });
+  });
+
+  describe('errors', () => {
+    let appointments;
+    beforeEach(function () {
+      appointments = new Appointments();
+      appointments.add({startsAt: 1, customer: 'customer'});
+    });
+    it('returns no errors for a unique object', () => {
+      const appointment = {startsAt: 2, customer: 'customer'};
+      expect(appointments.errors(appointment)).toEqual({});
+    });
+    it('returns error if the timeSlot is already used', () => {
+      const appointment = {startsAt: 1, customer: 'customer'};
+      appointments.add(appointment);
+      expect(appointments.errors(appointment)).toEqual({
+        startsAt: 'Appointment start time has already been allocated'
+      })
+    });
+  });
+
+  describe('isValid', () => {
+    let appointments;
+    beforeEach(function () {
+      appointments = new Appointments();
+      appointments.add({startsAt: 1, customer: 'customer'});
+    });
+    it('returns true for a unique object', () => {
+      const appointment = {startsAt: 2, customer: 'customer'};
+      expect(appointments.isValid(appointment)).toBeTruthy();
+    });
+    it('returns error if the timeslot is already used', () => {
+      const appointment = {startsAt: 1, customer: 'customer'};
+      expect(appointments.isValid(appointment)).toBeFalsy();
+    });
   });
 });
 

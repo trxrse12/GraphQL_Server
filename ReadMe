@@ -5,3 +5,4 @@
     b. if you have already cloned the repo:
         git remote set-url origin https://<USERNNAME>:<PASSWORD>@github.com/path/to/repo.git
 
+2. DO NOT use plural in your camelCases vars names: e.g. do NOT use startsAt, instead use startAt

@@ -10,7 +10,75 @@ export function getRandomInt(min, max){
 }
 
 export class Appointments {
+  /*
+    initialTimeSlots = [{startsAt: 123}, {startsAt: 234}]
+   */
+  constructor(initialAppointments = [], initialTimeSlots = []) {
 
+    /* a list of appointments
+      [
+        { customer: 58, startAt: 234, stylist: 'Jo', service: 'Beard trim' },
+        { customer: 80, startAt: 234, stylist: 'Ashley', service: 'Cut' },
+        { customer: 37, startAt: 234, stylist: 'Jo', service: 'Blow-dry' },
+      ]
+    */
+    this.appointments = [];
+
+    this.timeSlots = initialTimeSlots;
+    this.add = this.add.bind(this);
+    initialAppointments.forEach(this.add);
+  }
+
+  /*
+    filters out duplications, returns the appointment
+   */
+  add(appointment) {
+    this.timeSlots = this.timeSlots.filter(timeSlot => {
+      return timeSlot.startsAt !== appointment.startsAt
+    });
+    this.appointments.push(appointment)
+    return appointment;
+  }
+
+  /*
+    from = number;
+    to = number;
+    customers = {'customer': {id:123}}
+    this.appointments = [
+        { customer: 58, startAt: 234, stylist: 'Jo', service: 'Beard trim' },
+        { customer: 80, startAt: 234, stylist: 'Ashley', service: 'Cut' },
+        { customer: 37, startAt: 234, stylist: 'Jo', service: 'Blow-dry' },
+      ]
+   */
+  getAppointments(from, to, customers){
+    return this.appointments
+      .filter(appointment => appointment.startsAt >= from)
+      .filter(appointment => appointment.startsAt <= to)
+      .map(appointment => ({...appointment, ...{customer: customers[appointment.customer]}}))
+      .sort((l, r) => l.startsAt - r.startsAt);
+  }
+
+  getTimeSlots(){
+    return this.timeSlots;
+  }
+
+  deleteAll(){
+    this.appointments.length = 0;
+  }
+
+  errors(appointment){
+    let errors = {};
+    if (this.appointments.filter(app => app.startsAt === appointment.startsAt).length > 0){
+      return ({
+        startsAt: 'Appointment start time has already been allocated'
+      })
+    }
+    return {};
+  }
+
+  isValid(appointment){
+    return Object.keys(this.errors(appointment)).length === 0;
+  }
 }
 
 export function buildTimeSlots() {
@@ -58,7 +126,7 @@ Array.prototype.pickRandom = function(){
 export function generateFakeAppointments(customers, timeslots) {
   let appointments = [];
   appointments = [...Array(timeslots.length).keys()]
-    .slice(0, getRandomInt((timeslots.length)/2+1, timeslots.length))
+    .slice(0, getRandomInt((timeslots.length)/2+1, timeslots.length-1))
     .map((v,i) => ({
       customer: customers.pickRandom().id,
       startsAt: timeslots[i].startsAt,
