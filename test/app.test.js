@@ -1,6 +1,7 @@
 import {buildApp} from '../src/app';
 import request from 'supertest';
 import {Customers} from '../src/customers';
+import {Appointments} from '../src/appointments';
 
 let server;
 
@@ -95,6 +96,69 @@ describe('app', () => {
             })
           );
       });
+    });
+  });
+
+  describe('availableTimeSlots', () => {
+    let timeSlotSpy = jest.fn();
+    beforeEach(function () {
+      spyOn(Appointments.prototype, 'getTimeSlots', timeSlotSpy);
+    });
+    afterEach(function () {
+      removeSpy(Appointments.prototype, 'getTimeSlots');
+    });
+    it('gets appointments',async () => {
+      await request(app())
+        .get('/availableTimeSlots')
+        .expect(200);
+    });
+
+    it('returns all time slots from appointments',async () => {
+      const timeSlots = [1,2,3];
+      timeSlotSpy.mockReturnValueOnce(timeSlots);
+      await request(app())
+        .get('/availableTimeSlots')
+        .then(response => {
+          expect(response.body).toEqual(timeSlots);
+        });
+    });
+  });
+
+  describe('POST appointments', () => {
+    let addSpy = jest.fn();
+    let isValidSpy = jest.fn();
+    const appointment = {
+      startsAt: new Date().setHours(9,0,0,0),
+      service: 'Blow-dry',
+    }
+
+    beforeEach(() => {
+      spyOn(Appointments.prototype, 'add', addSpy);
+      spyOn(Appointments.prototype, 'isValid', isValidSpy);
+      isValidSpy.mockReturnValue(true);
+    });
+
+    afterEach(() => {
+      removeSpy(Appointments.prototype, 'add');
+      removeSpy(Appointments.prototype, 'isValid');
+    });
+
+    it('saves an appointment', async () => {
+      await request(app()).post('/appointments')
+        .send(appointment)
+        .expect(201);
+    });
+
+    it('passes appointments request to appointments module', async () => {
+      await request(app()).post('/appointments')
+        .send(appointment);
+      expect(addSpy).toHaveBeenCalledWith(appointment);
+    });
+
+    it('validates appointment requests',async () => {
+      await request(app()).post('/appointments')
+        .send(appointment);
+      expect(isValidSpy).toHaveBeenCalledWith(appointment);
     });
   });
 });
