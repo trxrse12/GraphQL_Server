@@ -81,6 +81,20 @@ describe('app', () => {
           .send(customer)
           .expect(422);
       });
+      it('calls errors for an invalid customer',async () => {
+        await request(app()).post('/customers')
+          .send(customer)
+        expect(errorsSpy).toHaveBeenCalledWith(customer);
+      });
+      it('returns errors',async () => {
+        await request(app()).post('/customers')
+          .send(customer)
+          .then(response =>
+            expect(response.body).toEqual({
+              errors: {field: 'error'}
+            })
+          );
+      });
     });
   });
 });

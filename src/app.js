@@ -20,7 +20,7 @@ export function buildApp(customerData, appointmentData, timeSlots) {
       return res.status(201).json(customerWithId);
     } else {
       const errors = customers.errors(customer);
-      return res.status(422).json(errors);
+      return res.status(422).json({errors});
     }
   })
   return app;
