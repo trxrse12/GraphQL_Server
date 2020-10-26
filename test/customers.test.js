@@ -2,15 +2,15 @@ import {Customers,
   generateFakeCustomers,
 } from '../src/customers';
 
-describe('customers', () => {
+describe('customers utility class', () => {
   const customer = {
-      firstName: 'Ashley',
-      lastName: 'Jones',
-      phoneNumber: '123456789'
-    };
+    firstName: 'Ashley',
+    lastName: 'Jones',
+    phoneNumber: '123456789'
+  };
 
   describe('add', () => {
-    it('returns the same field as provided', () => {
+    it('returns the same field as provided, when adding a customer', () => {
       const result = new Customers().add(customer);
       expect(result.firstName).toBe('Ashley');
       expect(result.lastName).toBe('Jones');

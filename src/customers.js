@@ -28,13 +28,46 @@ export const generateFakeCustomers = () => {
   return customers;
 };
 
+/*
+  Utility class used in the Express server.
+  Def: customer = {
+      firstName: 'Ashley',
+      lastName: 'Jones',
+      phoneNumber: '123456789'
+    }
+  The class can:
+    0. be initialized with a list of mocked customers;
+    1. add a customer to an internal store object;
+    2. return the whole set of stored customers;
+    3. when adding customers it generates unique IDs
+    4. returns an error object when:
+        - a phone number is already used;
+        - the first name is blank;
+        - the last name is blank;
+        - the phone number is blank;
+     5. has a customer validation method, which returns true/false;
+     6. can search for a term among the fields of the stored customers, in which case;
+        - it returns the index of the customer that contains the search term;
+        - it returns empty array if no customer matches the search term;
+     7. can search for a customer in the list of input customers, in which case:
+        - it returns an empty array if no customer matches the search term;
+        - it does the search only starting from the beginning of the string;
+        - it only lists unique customers ids, even if the match happens in more then one field
+        - it sorts the results according to a sort column;
+        - it sorts in ascending or descending order;
+        - it limits the number of found customers to a max param;
+        - it pages the found customers according to an "after" param;
+        - it returns everything if no search term;
+        - it limits the results to max 10 by default;
+        - it sorts by default by the firstName;
+ */
 export class Customers {
   constructor(initialCustomers = []){
     this.nextId = 0;
     this.customers = {};
     this.add = this.add.bind(this);
+    this.isValid = this.isValid.bind(this);
     initialCustomers.forEach(this.add);
-    // this.errors = this.errors.bind(this);
   }
 
   add(customer) {

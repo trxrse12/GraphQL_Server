@@ -9,19 +9,29 @@ export function getRandomInt(min, max){
   return Math.floor(Math.random() * (max - min +1)) + min;
 }
 
+
+/*
+  Utility class used in the Express routes to process the mock info injected into the server.
+
+  This class can:
+    0.  be initialized with a list of mocked appointments;
+    1.  removes duplicates in the input mocked timeSlots data;
+    2.  delete all the stored appointments
+    3.  retrieve a list of appointments within a certain range interval;
+    4.  sort the list of retrieved appointments by startsAt
+ */
 export class Appointments {
   /*
-    initialTimeSlots = [{startsAt: 123}, {startsAt: 234}]
-   */
-  constructor(initialAppointments = [], initialTimeSlots = []) {
-
-    /* a list of appointments
+    Inputs:
+    1. a list of appointments
       [
         { customer: 58, startAt: 234, stylist: 'Jo', service: 'Beard trim' },
         { customer: 80, startAt: 234, stylist: 'Ashley', service: 'Cut' },
         { customer: 37, startAt: 234, stylist: 'Jo', service: 'Blow-dry' },
       ]
-    */
+    2. initialTimeSlots = [{startsAt: 123}, {startsAt: 234}]
+   */
+  constructor(initialAppointments = [], initialTimeSlots = []) {
     this.appointments = [];
 
     this.timeSlots = initialTimeSlots;
@@ -81,6 +91,10 @@ export class Appointments {
   }
 }
 
+
+/* 1. Function that builds a time grid of 30 mins, for 10 hours a day only, for a year in the past and a month in the future
+   2. The result looks like: [{startsAt: 1113241144}, {startsAt: 1133313244}]
+ */
 export function buildTimeSlots() {
   const startDate = new Date();
   const lastYearToday = startDate.setFullYear(startDate.getFullYear()-1);
