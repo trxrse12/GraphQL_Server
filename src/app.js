@@ -35,8 +35,10 @@ export function buildApp(customerData, appointmentData, timeSlots) {
     if (appointments.isValid(appointment)){
       appointments.add(appointment);
       return res.sendStatus(201);
+    } else {
+      const errors = appointments.errors(appointment);
+      return res.status(422).json({errors});
     }
-    return res.sendStatus(500);
   })
   return app;
 }

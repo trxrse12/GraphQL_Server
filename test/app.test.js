@@ -127,6 +127,8 @@ describe('app', () => {
   describe('POST appointments', () => {
     let addSpy = jest.fn();
     let isValidSpy = jest.fn();
+    let errorsSpy = jest.fn();
+
     const appointment = {
       startsAt: new Date().setHours(9,0,0,0),
       service: 'Blow-dry',
@@ -159,6 +161,42 @@ describe('app', () => {
       await request(app()).post('/appointments')
         .send(appointment);
       expect(isValidSpy).toHaveBeenCalledWith(appointment);
+    });
+
+    describe('invalid appointment', () => {
+      let error = {field: 'error'};
+
+      beforeEach(() => {
+        spyOn(Appointments.prototype, 'errors', errorsSpy);
+        isValidSpy.mockReturnValue(false);
+        errorsSpy.mockReturnValue(error);
+      });
+
+      afterEach(() => {
+        removeSpy(Appointments.prototype, 'errors');
+      });
+
+      it('returns 422 for an invalid appointment', async () => {
+        await request(app()).post('/appointments')
+          .send(appointment)
+          .expect(422)
+      });
+
+      it('calls errors for an invalid appointment',async () => {
+        await request(app()).post('/appointments')
+          .send(appointment);
+        expect(errorsSpy).toHaveBeenCalledWith(appointment);
+      });
+
+      it('returns errors',async () => {
+        await request(app()).post('/appointments')
+          .send(appointment)
+          .then(response =>
+            expect(response.body).toEqual({
+              errors: {field: 'error'}
+            })
+          )
+      });
     });
   });
 });
