@@ -5,6 +5,11 @@ import {Appointments} from '../src/appointments';
 
 let server;
 
+const appointment = {
+  startsAt: new Date().setHours(9,0,0,0),
+  service: 'Blow-dry',
+}
+
 describe('app', () => {
   let originalFunctions = {};
 
@@ -129,11 +134,6 @@ describe('app', () => {
     let isValidSpy = jest.fn();
     let errorsSpy = jest.fn();
 
-    const appointment = {
-      startsAt: new Date().setHours(9,0,0,0),
-      service: 'Blow-dry',
-    }
-
     beforeEach(() => {
       spyOn(Appointments.prototype, 'add', addSpy);
       spyOn(Appointments.prototype, 'isValid', isValidSpy);
@@ -197,6 +197,44 @@ describe('app', () => {
             })
           )
       });
+    });
+  });
+
+  describe('GET appointments', () => {
+    let appointmentsSpy = jest.fn();
+    let customersSpy = jest.fn();
+
+    beforeEach(() => {
+      spyOn(Appointments.prototype, 'getAppointments', appointmentsSpy);
+      spyOn(Customers.prototype, 'all', customersSpy);
+    });
+
+    afterEach(() => {
+      removeSpy(Appointments.prototype, 'getAppointments');
+      removeSpy(Customers.prototype, 'all');
+    });
+
+    it('get appointments',async () => {
+      await request(app()).get('/appointments/123-456')
+        .send(appointment)
+        .expect(200)
+    });
+
+    it('passes the "from" and "to" params through to appointments when retrieving appointments',async () => {
+      const allCustomers = [{id: 0}, {id: 1}];
+      customersSpy.mockReturnValue(allCustomers);
+      await request(app()).get('/appointments/123-456');
+      expect(appointmentsSpy).toHaveBeenCalledWith(123, 456, allCustomers);
+    });
+
+    it('returns the result of calling getAppointments', async () => {
+      const allAppointments = [{startsAt: 123}, {startsAt: 456}];
+      appointmentsSpy.mockReturnValue(allAppointments);
+      await request(app())
+        .get('/appointments/123-456')
+        .then(response => {
+          expect(response.body).toEqual(allAppointments);
+        });
     });
   });
 });

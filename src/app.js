@@ -40,5 +40,14 @@ export function buildApp(customerData, appointmentData, timeSlots) {
       return res.status(422).json({errors});
     }
   })
+
+  app.get('/appointments/:from-:to', (req, res, next) => {
+    res.json(appointments.getAppointments(
+      parseInt(req.params.from),
+      parseInt(req.params.to),
+      customers.all()
+    ))
+  })
+
   return app;
 }
