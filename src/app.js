@@ -49,5 +49,33 @@ export function buildApp(customerData, appointmentData, timeSlots) {
     ))
   })
 
+  app.get('/customers', (req, res, next) => {
+    const results = customers.search(buildSearchParams(req.query));
+    res.json(results);
+  })
+
   return app;
+}
+
+/* accepts an object of shape:
+    {searchTerm, after, limit, orderBy, orderDirection} of possibly undefined values
+   and returns an object that eliminates the props that are not valid (undefined or not integers)
+ */
+function buildSearchParams({searchTerm, after, limit, orderBy, orderDirection}) {
+  const searchParams = {};
+  if (searchTerm) searchParams.searchTerms = buildSearchTerms(searchTerm);
+  if (after) searchParams.after = parseInt(after);
+  if (limit) searchParams.limit = parseInt(limit);
+  if (orderBy) searchParams.orderBy = orderBy;
+  if (orderDirection) searchParams.orderDirection = orderDirection;
+  return searchParams;
+}
+
+/* get a string or an array, returns an array*/
+function buildSearchTerms(searchTerm){
+  if (!searchTerm) return undefined;
+  if (Array.isArray(searchTerm)){
+    return searchTerm;
+  }
+  return [searchTerm];
 }

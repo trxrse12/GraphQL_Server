@@ -237,4 +237,52 @@ describe('app', () => {
         });
     });
   });
+
+  describe('GET /customers', () => {
+    let searchSpy = jest.fn();
+    beforeEach(() => {
+      spyOn(Customers.prototype, 'search', searchSpy);
+    });
+    afterEach(() => {
+      removeSpy(Customers.prototype, 'search');
+    });
+
+    it('passes params on to customer search', async () => {
+      await request(app())
+        .get('/customers?limit=10&after=6&searchTerm=A&orderBy=firstName&orderDirection=asc');
+      expect(searchSpy).toHaveBeenCalledWith({
+        limit: 10,
+        after: 6,
+        searchTerms: ['A'],
+        orderBy: 'firstName',
+        orderDirection: 'asc',
+        }
+      )
+    });
+
+    it('does NOT pass unknown search terms',async () => {
+      await request(app())
+        .get('/customers?test=test');
+      expect(searchSpy).toHaveBeenCalledWith({});
+    });
+
+    it('passes multiple search terms', async () => {
+      await request(app())
+        .get('/customers?searchTerm=A&searchTerm=B');
+      expect(searchSpy).toHaveBeenCalledWith({
+        searchTerms: ['A', 'B']
+      });
+    });
+
+    it('passes the result back to user',async () => {
+      const results = [{id: 0}, {id: 1}];
+      searchSpy.mockReturnValue(results);
+      await request(app())
+        .get('/customers')
+        .expect(200)
+        .then(response =>
+          expect(response.body).toEqual(results)
+        )
+    });
+  });
 });
