@@ -129,10 +129,10 @@ export class Customers {
     orderDirection = orderDirection || 'asc';
     if (!Array.isArray(searchTerms) ||  // return all if no search term
       ((searchTerms.length === 1) && (searchTerms[0] === '')))
-        {return (Object.entries(this.all())
-          .map(v => v[1])
-          .sort((l,r) => l.firstName.localeCompare(r.firstName))
-          .slice(0,10))}
+      {return (Object.entries(this.all())
+        .map(v => v[1])
+        .sort((l,r) => l.firstName.localeCompare(r.firstName))
+        .slice(0,10))}
     const sorted = searchTerms
       .flatMap(term => this.searchForTerm(term)) // brings bag the customer indexes having
                                                   // at least a field in the corresp. customer

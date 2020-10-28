@@ -1,4 +1,23 @@
 import express from 'express';
+import expressGraphql from 'express-graphql';
+
+// import {join} from 'path';
+// import { loadSchemaSync } from '@graphql-tools/load';
+// import {GraphQLFileLoader} from '@graphql-tools/graphql-file-loader';
+// const schema = loadSchemaSync(join(__dirname, 'schema.graphql'),
+//   {loaders: [new GraphQLFileLoader()]}
+//   );
+// const schemaText = loadSchemaSync(join(__dirname, './schema.graphql'), {
+//   loaders: [
+//     new GraphQLFileLoader(),
+//   ]
+// });
+
+
+import { buildSchema } from 'graphql';
+import schemaText from './schema.graphql';
+const schema = buildSchema(schemaText);
+
 import morgan from 'morgan';
 import {Customers} from './customers';
 import {Appointments} from './appointments';
@@ -53,6 +72,15 @@ export function buildApp(customerData, appointmentData, timeSlots) {
     const results = customers.search(buildSearchParams(req.query));
     res.json(results);
   })
+
+  app.use('/graphql', expressGraphql({
+    schema,
+    rootValue: {
+      customers: query =>
+        customers.search(buildSearchParams((query)).map(customer => ({...customer,
+          appointment: () => appointments.forCustomer(customer.id)})))
+    }
+  }))
 
   return app;
 }

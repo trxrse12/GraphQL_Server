@@ -285,4 +285,31 @@ describe('app', () => {
         )
     });
   });
+
+  describe('POST graphql', () => {
+    describe('customers query', () => {
+      let searchSpy = jest.fn();
+      beforeEach(() => {
+        spyOn(Customers.prototype, 'search', searchSpy);
+      });
+      afterEach(() => {
+        removeSpy(Customers.prototype, 'search');
+      });
+      it('returns all customers',async () => {
+        searchSpy.mockReturnValue([
+          {id: '123', firstName: 'test', lastName: 'test'},
+          {id: '234', firstName: 'another', lastName: 'another'},
+        ])
+        await request(app()).post('/graphql?')
+          .send({"query":"\n\n{ customers { id firstName } }\n\n"})
+          .then(response => {
+            const data = response.body.data;
+            expect(data.customer).toEqual([
+              {id: 123, firstName: 'test'},
+              {id: '234', firstName: 'another'},
+            ]);
+          })
+      });
+    });
+  });
 });
