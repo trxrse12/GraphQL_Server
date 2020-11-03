@@ -68,6 +68,10 @@ export class Appointments {
       .sort((l, r) => l.startsAt - r.startsAt);
   }
 
+  forCustomer(customerId) {
+    return this.appointments.filter(appointment => appointment.customer === customerId);
+  }
+
   getTimeSlots(){
     return this.timeSlots;
   }

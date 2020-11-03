@@ -5,7 +5,7 @@
   "main": "server.js",
   "scripts": {
     "build": "webpack",
-    "test": "jest --watchAll",
+    "test": "jest --watchAll --config ./jest.json",
     "build-server": "webpack --config webpack-server.config.js -w",
     "test-server": "jest --config ./jest.json"
   },

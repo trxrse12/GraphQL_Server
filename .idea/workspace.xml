@@ -2,10 +2,21 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="046aef7a-ddf3-49b1-a223-e9744b6f6df5" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/utilities/tools.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ReadMe" beforeDir="false" afterPath="$PROJECT_DIR$/ReadMe" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/app.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/app.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/appointments.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/appointments.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/customers.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/customers.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/schema.graphql" beforeDir="false" afterPath="$PROJECT_DIR$/src/schema.graphql" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/test/app.test.js" beforeDir="false" afterPath="$PROJECT_DIR$/test/app.test.js" afterDir="false" />
     </list>
+    <ignored path="$PROJECT_DIR$/dist/" />
+    <ignored path="$PROJECT_DIR$/.tmp/" />
+    <ignored path="$PROJECT_DIR$/temp/" />
+    <ignored path="$PROJECT_DIR$/tmp/" />
+    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -24,8 +35,24 @@
   <component name="GitToolBoxStore">
     <option name="projectConfigVersion" value="2" />
   </component>
+  <component name="ProjectFrameBounds" extendedState="6">
+    <option name="x" value="-244" />
+    <option name="y" value="98" />
+    <option name="width" value="1920" />
+    <option name="height" value="1055" />
+  </component>
   <component name="ProjectId" id="1iy0FiJAFHwBerqQk7O9WN3SSzb" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectView">
+    <navigator proportions="" version="1">
+      <foldersAlwaysOnTop value="true" />
+    </navigator>
+    <panes>
+      <pane id="ProjectPane" />
+      <pane id="Scope" />
+      <pane id="NBKnowledgePane" />
+    </panes>
+  </component>
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
@@ -33,9 +60,22 @@
   <component name="PropertiesComponent">
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="nodejs_package_manager_path" value="npm" />
     <property name="settings.editor.selected.configurable" value="editing.templates" />
     <property name="vue.rearranger.settings.migration" value="true" />
+  </component>
+  <component name="RunDashboard">
+    <option name="ruleStates">
+      <list>
+        <RuleState>
+          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
+        </RuleState>
+        <RuleState>
+          <option name="name" value="StatusDashboardGroupingRule" />
+        </RuleState>
+      </list>
+    </option>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
@@ -51,11 +91,43 @@
       <workItem from="1603098080209" duration="51850000" />
       <workItem from="1603451223495" duration="1582000" />
       <workItem from="1603707637247" duration="20144000" />
+      <workItem from="1604399305587" duration="336000" />
     </task>
     <servers />
   </component>
+  <component name="TimeTrackingManager">
+    <option name="totallyTimeSpent" value="336000" />
+  </component>
+  <component name="ToolWindowManager">
+    <frame x="0" y="0" width="1920" height="1060" extended-state="6" />
+    <editor active="true" />
+    <layout>
+      <window_info id="npm" side_tool="true" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.11140868" />
+      <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
+      <window_info id="Favorites" order="2" side_tool="true" />
+      <window_info anchor="bottom" id="Quokka" />
+      <window_info anchor="bottom" id="GraphQL" />
+      <window_info anchor="bottom" id="Message" order="0" />
+      <window_info anchor="bottom" id="Find" order="1" />
+      <window_info anchor="bottom" id="Run" order="2" weight="0.32990867" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
+      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
+      <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
+      <window_info anchor="bottom" id="TODO" order="6" />
+      <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
+      <window_info anchor="bottom" id="Version Control" order="8" />
+      <window_info anchor="bottom" x="2227" y="296" width="1122" height="616" id="Terminal" order="9" weight="0.32928178" />
+      <window_info anchor="bottom" id="Event Log" order="10" side_tool="true" weight="0.32990867" />
+      <window_info anchor="right" id="Key Promoter X" />
+      <window_info anchor="right" id="Json Parser" />
+      <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
+      <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
+      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
+    </layout>
+  </component>
   <component name="TypeScriptGeneratedFilesManager">
-    <option name="version" value="3" />
+    <option name="version" value="1" />
   </component>
   <component name="WindowStateProjectService">
     <state x="439" y="377" width="551" height="333" key="#com.intellij.codeInsight.template.impl.EditVariableDialog" timestamp="1602867638177">

@@ -122,6 +122,9 @@ export class Customers {
     })
   }
 
+  /*
+      return [{id:0, firstName: 'Remus'},{id: 1, firstName: 'Sandra'}]
+   */
   search({searchTerms, orderBy, orderDirection, limit, after}) {
     limit = limit || 10;
     searchTerms = searchTerms || [''];
